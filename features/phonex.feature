@@ -2,10 +2,10 @@ Feature: Phonex phone number searching
   As a user of phonex
   I want to provide phone numbers with an international prefix (+ or 00)
   So that phonex will generate variants and open Google Dork searches
-
+  
   @happy_path
   Scenario: User provides a valid phone number with '+' prefix
-    Given I have the phone number "+491701234567"
+    Given I have the phone number "+4917012 34567"
     When I run phonex with this phone number
     Then it should generate multiple search variants
     And it should not show an error

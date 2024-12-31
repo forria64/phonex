@@ -8,7 +8,7 @@
 ▓   ▓   ▓▓  ▓▓▓   ▓▓   ▓▓   ▓▓▓   ▓▓   ▓  ▓▓▓▓▓▓▓▓▓▓  ▓▓   ▓
 █   ██████  ███   ████   █████    ██   ███     ████   ███   
 █   ████████████████████████████████████████████████████████ 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~v1.0-alpha
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~v1.1-alpha
 ```
 A Python utility for searching phone numbers in international format across the web. Ideal for
 compliance checks, data validation, or open-source intelligence.
@@ -18,7 +18,7 @@ compliance checks, data validation, or open-source intelligence.
 ## FEATURES
 
    **Phone Number Search**  
-   Efficiently queries the web for specified phone numbers by generating
+   Efficiently sanitizes and queries the web for specified phone numbers by generating
    multiple string variants. Generates multiple phone number formats: E.164, international (+), double-zero (00),
    and local formats—with or without spacing/dashes.
 

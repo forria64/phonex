@@ -13,6 +13,13 @@ def strip_spaces_and_dashes(number_str: str) -> str:
     """
     return "".join(ch for ch in number_str if ch.isalnum() or ch == '+')
 
+def sanitize_phone_number(raw_input: str) -> str:
+    """
+    Normalize the phone number by stripping spaces and dashes.
+    """
+    sanitized_input = strip_spaces_and_dashes(raw_input)
+    return normalize_double_zero(sanitized_input)
+
 def normalize_double_zero(number_str: str) -> str:
     """
     Convert phone numbers starting with '00' to start with '+'.
@@ -30,27 +37,13 @@ def is_valid_phone_number(phone_number: str, default_region: str = "US") -> bool
 
 def generate_phone_number_variants(raw_input: str, default_region: str = "US") -> list:
     """
-    1) Enforce that 'raw_input' starts with '+' or '00'. Otherwise, reject.
-    2) Parse with libphonenumbers:
-       - First try no region
-       - Then fallback to 'default_region' if invalid
-    3) If valid, generate base formats:
-       - E.164
-       - INTERNATIONAL
-       - NATIONAL (local)
-       - "00" version from E.164 (no spaces)
-       - "00" spaced version from INTERNATIONAL
-    4) For each of those base formats, also create a "no-spaces" variant.
-    5) Return them all sorted.
+    Generate multiple variants of a phone number for Google Dork search.
     """
+    phone_number = sanitize_phone_number(raw_input.strip())
 
-    # 1) Reject if number does not start with '+' or '00'
-    if not (raw_input.startswith('+') or raw_input.startswith('00')):
+    if not (phone_number.startswith('+') or phone_number.startswith('00')):
         print("Error: Phone number must begin with '+' or '00' to indicate an international prefix.")
         sys.exit(1)
-
-    # Normalize '00' to '+'
-    phone_number = normalize_double_zero(raw_input.strip())
 
     if not is_valid_phone_number(phone_number):
         print(f"Error: '{phone_number}' is not a valid phone number.")
@@ -58,7 +51,6 @@ def generate_phone_number_variants(raw_input: str, default_region: str = "US") -
 
     parsed_number = phonenumbers.parse(phone_number, None)
     
-    # 3) Build base variants
     variants = set()
     e164_fmt = phonenumbers.format_number(parsed_number, PhoneNumberFormat.E164)
     variants.add(e164_fmt)
@@ -69,7 +61,6 @@ def generate_phone_number_variants(raw_input: str, default_region: str = "US") -
     nat_fmt = phonenumbers.format_number(parsed_number, PhoneNumberFormat.NATIONAL)
     variants.add(nat_fmt)
 
-    # 3a) "00" variants:
     if e164_fmt.startswith('+'):
         double_zero_ns = "00" + e164_fmt[1:]
         variants.add(double_zero_ns)
@@ -77,7 +68,6 @@ def generate_phone_number_variants(raw_input: str, default_region: str = "US") -
         double_zero_spaced = "00" + intl_fmt[1:]
         variants.add(double_zero_spaced)
 
-    # 4) For each variant, also create a "no-spaces" version
     final_variants = set()
     for var in variants:
         final_variants.add(var)
@@ -86,20 +76,16 @@ def generate_phone_number_variants(raw_input: str, default_region: str = "US") -
     return sorted(final_variants)
 
 def open_google_dork_query_in_browser(phone_number: str):
-    """
-    Generate phone number variants, then for each variant, construct a Google exact-match query
-    and open it in the browser (with a slight random delay).
-    """
     variants = generate_phone_number_variants(phone_number)
 
     for variant in variants:
         query = f'+"{variant}"'
         encoded_query = urllib.parse.quote(query)
         google_url = f"https://www.google.com/search?q={encoded_query}"
-
-        time.sleep(random.uniform(1, 3))  # random delay
-        print(f"Opening Google search results for: {variant}")
+        print(f"Opening Google search results for: {variant}")  # Ensure this uses the sanitized number
+        time.sleep(random.uniform(1, 3))
         webbrowser.open(google_url)
+
 
 def print_usage():
     print("Usage: phonex <phone_number>")
@@ -115,7 +101,11 @@ def main():
         sys.exit(0)
 
     phone_number = sys.argv[1]
-    open_google_dork_query_in_browser(phone_number)
+    sanitized_number = sanitize_phone_number(phone_number)
+    print(f"Sanitized number (DEBUG): {sanitized_number}")  # Add this
+    open_google_dork_query_in_browser(sanitized_number)
+
+
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,45 @@
+# Python cache
+__pycache__/
+*.pyc
+phonex.egg-info/
+build/
+
+# Virtual environments
+env/
+venv/
+.venv/
+ENV/
+.env/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Distribution / packaging
+*.egg-info/
+*.egg
+dist/
+wheels/
+
+# Editable installs
+*.egg-info/
+*.egg
+
+# Test reports and logs
+reports/
+*.xml
+*.json
+*.log
+
+# Behave cache and output
+.behave/
+rerun.failing
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+
+# macOS system files
+.DS_Store
+
