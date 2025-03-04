@@ -10,7 +10,6 @@
 █   ████████████████████████████████████████████████████████ 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~v1.1-alpha
 ```
-
 A Python utility for searching phone numbers in international format across the web. Ideal for
 compliance checks, data validation, or open-source intelligence.
 
